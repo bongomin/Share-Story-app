@@ -4,10 +4,15 @@ var path = require('path');
 var cookieParser = require('cookie-parser');
 var mongoose = require('mongoose');
 var logger = require('morgan');
+var passport = require('passport');
+
+// passport config
+require('./config/passport')(passport);
 
 // importing the Routes
 var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
+var auth = require('./routes/auth');
 
 var app = express();
 
@@ -24,6 +29,8 @@ app.use(express.static(path.join(__dirname, 'public')));
 // loaing Routes
 app.use('/', indexRouter);
 app.use('/users', usersRouter);
+app.use('/auth',auth);
+
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
