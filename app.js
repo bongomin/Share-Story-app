@@ -14,6 +14,22 @@ var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
 var auth = require('./routes/auth');
 
+// lod keys
+var keys = require('./config/keys');
+
+// map global promise
+mongoose.Promise = global.Promise;
+
+// mongodb connections 
+
+mongoose.connect(keys.mongoURI, {
+  // useMongoClient:true
+  useNewUrlParser: true
+})
+.then(() => console.log('mongodb connected buddy !!!'))
+.catch(err => console.log(err));
+
+
 var app = express();
 
 // view engine setup
