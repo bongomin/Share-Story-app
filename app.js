@@ -6,6 +6,9 @@ var mongoose = require('mongoose');
 var logger = require('morgan');
 var passport = require('passport');
 
+// Load user model
+require('./model/User');
+
 // passport config
 require('./config/passport')(passport);
 
