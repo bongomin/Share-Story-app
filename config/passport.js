@@ -13,8 +13,8 @@ module.exports = function(passport){
        callbackURL:'/auth/google/callback',
        proxy: true
      }, (accessToken, refreshToken, profile, done) => {
-       console.log(accessToken);
-       console.log(profile);
+      //  console.log(accessToken);
+      //  console.log(profile);
       // const image = profile.photos[0].value.substring(0, profile.photos[0].value.indexOf('?'));
       
       const newUser = {
@@ -43,5 +43,13 @@ module.exports = function(passport){
       } )
 
      })
-   )
+   );
+   passport.serializeUser((user, done) => {
+      done(null, user.id);
+    });
+  
+    passport.deserializeUser((id, done) => {
+      User.findById(id).then(user => done(null, user));
+    });
+
  }

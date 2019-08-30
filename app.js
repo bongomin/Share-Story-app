@@ -4,7 +4,8 @@ var path = require('path');
 var cookieParser = require('cookie-parser');
 var mongoose = require('mongoose');
 var logger = require('morgan');
-var passport = require('passport');
+var passport = require('passport'); 
+var session = require('express-session');
 
 // Load user model
 require('./model/User');
@@ -45,10 +46,28 @@ app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
+app.use(session({
+  secret: 'secret', 
+  resave: false,
+  saveUninitialized: false
+}))
+
+// passport middleware
+app.use(passport.initialize());
+app.use(passport.session());
+
+// Setting global varaiable
+app.use((req,res,next)=>{
+  res.locals.user = req.user || null;
+  next();
+})
+
 // loaing Routes
 app.use('/', indexRouter);
 app.use('/users', usersRouter);
 app.use('/auth',auth);
+
+
 
 
 // catch 404 and forward to error handler
