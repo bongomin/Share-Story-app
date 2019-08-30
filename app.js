@@ -4,6 +4,7 @@ var path = require('path');
 var cookieParser = require('cookie-parser');
 var mongoose = require('mongoose');
 var logger = require('morgan');
+var hbs = require('express-handlebars');
 var passport = require('passport'); 
 var session = require('express-session');
 
@@ -39,6 +40,17 @@ var app = express();
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'hbs');
+
+// middleware for locating the partial file
+app.engine('hbs', hbs({
+  extname: 'hbs',
+  defaultLayout: 'layout',
+  layoutsDir: path.join(__dirname, 'views'),
+  partialsDir: [
+    //  path to your partials
+    path.join(__dirname, 'views/partials'),
+  ]
+}));
 
 app.use(logger('dev'));
 app.use(express.json());
