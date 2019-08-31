@@ -8,7 +8,7 @@ router.get('/', function(req, res) {
 
 /* GET DashBoard page. */
 router.get('/dashboard', function(req, res) {
-  res.send('DashBoard');
+  res.render('index/dashboard');
 });
 
 module.exports = router;

@@ -18,6 +18,7 @@ require('./config/passport')(passport);
 var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
 var auth = require('./routes/auth');
+var storyRouter= require('./routes/stories');
 
 // lod keys
 var keys = require('./config/keys');
@@ -78,6 +79,7 @@ app.use((req,res,next)=>{
 app.use('/', indexRouter);
 app.use('/users', usersRouter);
 app.use('/auth',auth);
+app.use('/stories',storyRouter);
 
 
 
