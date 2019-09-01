@@ -26,10 +26,20 @@
   crossorigin="anonymous">
   </script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.100.2/js/materialize.min.js"></script>
+  {{!-- ck editor cdn --}}
+  <script src="https://cdn.ckeditor.com/4.12.1/standard/ckeditor.js"></script>
+  {{!-- initailizing the navigation side bar icon slide effect and select option in the add form --}}
   <script>
     $(document).ready(()=>{
       $('.button-collapse').sideNav();
-    })
+      //iniatializing select option using materialise
+      $('select').material_select();
+    });
+      ///this is for the CK Editor 
+     CKEDITOR.replace( 'body', {
+        extraPlugins: 'wysiwygarea,toolbar,basicstyles,link'
+} );
   </script>
+
 </body>
 </html>
