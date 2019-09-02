@@ -7,9 +7,11 @@ var logger = require('morgan');
 var hbs = require('express-handlebars');
 var passport = require('passport'); 
 var session = require('express-session');
+var bodyParser = require('body-parser')
 
-// Load user model
+// Load  models 
 require('./model/User');
+require('./model/Story');
 
 // passport config
 require('./config/passport')(passport);
@@ -37,6 +39,10 @@ mongoose.connect(keys.mongoURI, {
 
 
 var app = express();
+
+// body-paser middleware
+app.use(bodyParser.urlencoded({ extended: false }))
+app.use(bodyParser.json())
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
