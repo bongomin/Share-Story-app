@@ -2,16 +2,16 @@ var createError = require('http-errors');
 var express = require('express');
 var path = require('path');
 var cookieParser = require('cookie-parser');
-var mongoose = require('mongoose');
+const bodyParser = require('body-parser');
+const mongoose = require('mongoose');
 var logger = require('morgan');
 var hbs = require('express-handlebars');
 var passport = require('passport'); 
 var session = require('express-session');
-var bodyParser = require('body-parser')
 
 // Load  models 
-require('./model/User');
-require('./model/Story');
+require('./models/User');
+require('./models/Story');
 
 // passport config
 require('./config/passport')(passport);
@@ -43,6 +43,7 @@ var app = express();
 // body-paser middleware
 app.use(bodyParser.urlencoded({ extended: false }))
 app.use(bodyParser.json())
+
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
