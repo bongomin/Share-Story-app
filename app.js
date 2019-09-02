@@ -24,6 +24,12 @@ var storyRouter= require('./routes/stories');
 
 // lod keys
 var keys = require('./config/keys');
+// Handlebars Helpers hbs
+var {
+  truncate,
+  stripTags,
+  formatDate
+} = require('./helpers/hbs');
 
 // map global promise
 mongoose.Promise = global.Promise;
@@ -51,6 +57,12 @@ app.set('view engine', 'hbs');
 
 // middleware for locating the partial file
 app.engine('hbs', hbs({
+  helpers :{
+    truncate : truncate,
+    stripTags : stripTags,
+    formatDate:formatDate
+
+  },
   extname: 'hbs',
   defaultLayout: 'layout',
   layoutsDir: path.join(__dirname, 'views'),
