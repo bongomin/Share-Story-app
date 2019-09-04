@@ -2,8 +2,9 @@ var createError = require('http-errors');
 var express = require('express');
 var path = require('path');
 var cookieParser = require('cookie-parser');
-const bodyParser = require('body-parser');
-const mongoose = require('mongoose');
+var bodyParser = require('body-parser');
+var methodOverride = require('method-override');
+var mongoose = require('mongoose');
 var logger = require('morgan');
 var hbs = require('express-handlebars');
 var passport = require('passport'); 
@@ -50,6 +51,9 @@ var app = express();
 // body-paser middleware
 app.use(bodyParser.urlencoded({ extended: false }))
 app.use(bodyParser.json())
+
+// Method Override middleware
+app.use(methodOverride('_method'));
 
 
 // view engine setup
