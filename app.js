@@ -30,7 +30,8 @@ var {
   truncate,
   stripTags,
   formatDate,
-  select
+  select,
+  editIcon 
 } = require('./helpers/hbs');
 
 // map global promise
@@ -66,7 +67,8 @@ app.engine('hbs', hbs({
     truncate : truncate,
     stripTags : stripTags,
     formatDate:formatDate,
-    select : select
+    select : select,
+    editIcon : editIcon
 
   },
   extname: 'hbs',
