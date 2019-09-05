@@ -17,20 +17,32 @@ router.get('/', (req, res) => {
     });
 });
 
-// show single stories
-
-router.get('/show/:id',(req,res) => {
+// Show Single Story
+router.get('/show/:id', (req, res) => {
   Story.findOne({
-    _id:req.params.id
+    _id: req.params.id
   })
   .populate('user')
   .populate('comments.commentUser')
   .then(story => {
-    res.render('stories/show',{
-      story :story
-    });
-  })
-
+    if(story.status == 'public'){
+      res.render('stories/show', {
+        story:story
+      });
+    } else {
+      if(req.user){
+        if(req.user.id == story.user._id){
+          res.render('stories/show', {
+            story:story
+          });
+        } else {
+          res.redirect('/stories');
+        }
+      } else {
+        res.redirect('/stories');
+      }
+    }
+  });
 });
 
 // Add Story Form
