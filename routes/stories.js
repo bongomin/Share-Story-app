@@ -4,10 +4,9 @@ const mongoose = require('mongoose');
 const Story = mongoose.model('stories');
 const User = mongoose.model('users');
 const {ensureAuthenticated, ensureGuest} = require('../helpers/auth');
-
 // Stories Index
 router.get('/', (req, res) => {
-  Story.find({status:"public"})
+  Story.find({status:'public'})
     .populate('user')
     .sort({date:'desc'})
     .then(stories => {
@@ -25,24 +24,32 @@ router.get('/show/:id', (req, res) => {
   .populate('user')
   .populate('comments.commentUser')
   .then(story => {
-    if(story.status == 'public'){
-      res.render('stories/show', {
-        story:story
-      });
-    } else {
-      if(req.user){
-        if(req.user.id == story.user._id){
-          res.render('stories/show', {
-            story:story
-          });
-        } else {
-          res.redirect('/stories');
-        }
-      } else {
-        res.redirect('/stories');
-      }
-    }
+    res.render('stories/show', {
+      story: story
+    });
   });
+});
+
+// List stories from a user
+router.get('/user/:userId', (req, res) => {
+  Story.find({user: req.params.userId, status: 'public'})
+    .populate('user')
+    .then(stories => {
+      res.render('stories/index', {
+        stories:stories
+      });
+    });
+});
+
+// Logged in users stories
+router.get('/my', ensureAuthenticated, (req, res) => {
+  Story.find({user: req.user.id})
+    .populate('user')
+    .then(stories => {
+      res.render('stories/index', {
+        stories:stories
+      });
+    });
 });
 
 // Add Story Form
@@ -66,8 +73,6 @@ router.get('/edit/:id', ensureAuthenticated, (req, res) => {
   });
 });
 
-
-
 // Process Add Story
 router.post('/', (req, res) => {
   let allowComments;
@@ -86,7 +91,7 @@ router.post('/', (req, res) => {
     user: req.user.id
   }
 
-  // Create Story
+  // Create Story / ceate new story
   new Story(newStory)
     .save()
     .then(story => {
@@ -94,8 +99,7 @@ router.post('/', (req, res) => {
     });
 });
 
-
-// Edit Form Process
+// Edit Form Process / updateing story form
 router.put('/:id', (req, res) => {
   Story.findOne({
     _id: req.params.id
@@ -109,7 +113,7 @@ router.put('/:id', (req, res) => {
       allowComments = false;
     }
 
-    // New values
+    // New values being fetched
     story.title = req.body.title;
     story.body = req.body.body;
     story.status = req.body.status;
@@ -122,13 +126,14 @@ router.put('/:id', (req, res) => {
   });
 });
 
-// Delete Story
-router.delete('/:id', (req,res) => {
-  Story.remove({_id : req.params.id})
-  .then(() => {
-    res.redirect('/dashboard');
-  })
+// Delete  A Story
+router.delete('/:id', (req, res) => {
+  Story.remove({_id: req.params.id})
+    .then(() => {
+      res.redirect('/dashboard');
+    });
 });
+
 // Add Comment
 router.post('/comment/:id', (req, res) => {
   Story.findOne({
@@ -142,7 +147,6 @@ router.post('/comment/:id', (req, res) => {
 
     // Add to comments array
     story.comments.unshift(newComment);
-
     story.save()
       .then(story => {
         res.redirect(`/stories/show/${story.id}`);
